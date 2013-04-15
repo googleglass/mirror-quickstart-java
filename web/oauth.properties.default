@@ -1,0 +1,5 @@
+# Replace these with values for your project from the Google API Console:
+# https://developers.google.com/console
+
+client_id=YOUR_CLIENT_ID
+client_secret=YOUR_CLIENT_SECRET
