@@ -19,7 +19,7 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/jackson-core-asl-1.9.11.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/jackson-mapper-asl-1.9.11.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/jsr305-1.3.9.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/libmirror.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/google-api-services-mirror-v1-rev2-1.14.1-beta.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/transaction-api-1.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xpp3-1.1.4c.jar"/>

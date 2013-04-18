@@ -15,15 +15,6 @@
   </repositories>
 
   <dependencies>
-    <!-- The generated Java API wrapper library -->
-    <dependency>
-      <groupId>com.google</groupId>
-      <artifactId>mirror-client</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/web/WEB-INF/locallib/libmirror.jar</systemPath>
-    </dependency>
-
     <!-- Java Google API Client Library -->
     <dependency>
       <groupId>com.google.api-client</groupId>
@@ -34,6 +25,11 @@
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client-appengine</artifactId>
       <version>1.14.1-beta</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-mirror</artifactId>
+      <version>v1-rev2-1.14.1-beta</version>
     </dependency>
 
     <!-- App Engine -->
