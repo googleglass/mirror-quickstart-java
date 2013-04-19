@@ -52,7 +52,7 @@ public class NewUserBootstrapper {
     starterProjectContact.setId(MainServlet.CONTACT_NAME);
     starterProjectContact.setDisplayName(MainServlet.CONTACT_NAME);
     starterProjectContact.setImageUrls(Lists.newArrayList(WebUtil.buildUrl(req,
-        "/static/images/saturn-eclipse.jpg")));
+        "/static/images/chipotle-tube-640x360.jpg")));
     Contact insertedContact = MirrorClient.insertContact(credential, starterProjectContact);
     LOG.info("Bootstrapper inserted contact " + insertedContact.getId() + " for user " + userId);
 

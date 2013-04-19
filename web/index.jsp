@@ -159,15 +159,14 @@ limitations under the License.
 
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItem">
-        <input type="hidden" name="message"
-               value="A solar eclipse of Saturn. Earth is also in this photo. Can you find it?">
-        <input type="hidden" name="imageUrl"
-               value="<%= appBaseUrl + "static/images/saturn-eclipse.jpg" %>">
+        <input type="hidden" name="message" value="Chipotle says 'hi'!">
+        <input type="hidden" name="imageUrl" value="<%= appBaseUrl +
+               "static/images/chipotle-tube-640x360.jpg" %>">
         <input type="hidden" name="contentType" value="image/jpeg">
 
         <button class="btn" type="submit">A picture
-          <img class="button-icon"
-               src="<%= appBaseUrl + "static/images/saturn-eclipse.jpg" %>">
+          <img class="button-icon" src="<%= appBaseUrl +
+               "static/images/chipotle-tube-640x360.jpg" %>">
         </button>
       </form>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
@@ -193,8 +192,8 @@ limitations under the License.
       <form class="span3" action="<%= WebUtil.buildUrl(request, "/main") %>"
             method="post">
         <input type="hidden" name="operation" value="insertContact">
-        <input type="hidden" name="iconUrl"
-               value="<%= appBaseUrl + "static/images/saturn-eclipse.jpg" %>">
+        <input type="hidden" name="iconUrl" value="<%= appBaseUrl +
+               "static/images/chipotle-tube-640x360.jpg" %>">
         <input type="hidden" name="name"
                value="<%= MainServlet.CONTACT_NAME %>">
         <button class="btn" type="submit">Insert Java Quick Start Contact
