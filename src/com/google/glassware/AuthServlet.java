@@ -41,7 +41,7 @@ public class AuthServlet extends HttpServlet {
     if (req.getParameter("error") != null) {
       LOG.severe("Something went wrong during auth: " + req.getParameter("error"));
       res.setContentType("text/plain");
-      res.getWriter().write("Authentication error: " + req.getParameter("error"));
+      res.getWriter().write("Something went wrong during auth. Please check your log for details");
       return;
     }
 

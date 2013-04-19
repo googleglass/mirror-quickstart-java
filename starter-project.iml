@@ -27,6 +27,7 @@
     <orderEntry type="library" name="AppEngine API" level="project" />
     <orderEntry type="library" name="lib (4)" level="project" />
     <orderEntry type="library" name="locallib" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
 

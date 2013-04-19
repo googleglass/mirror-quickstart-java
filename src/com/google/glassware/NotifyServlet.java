@@ -61,8 +61,17 @@ public class NotifyServlet extends HttpServlet {
     BufferedReader notificationReader =
         new BufferedReader(new InputStreamReader(request.getInputStream()));
     String notificationString = "";
+
+    // Count the lines as a very basic way to prevent Denial of Service attacks
+    int lines = 0;
     while (notificationReader.ready()) {
       notificationString += notificationReader.readLine();
+      lines++;
+
+      // No notification would ever be this long. Something is very wrong.
+      if(lines > 1000) {
+        throw new IOException("Attempted to parse notification payload that was unexpectedly long.");
+      }
     }
 
     LOG.info("got raw notification " + notificationString);
