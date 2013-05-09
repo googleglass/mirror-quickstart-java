@@ -16,7 +16,11 @@
 package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
+import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.services.mirror.model.Contact;
 import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.MenuValue;
@@ -40,6 +44,29 @@ import javax.servlet.http.HttpServletResponse;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class MainServlet extends HttpServlet {
+
+  /**
+   * Private class to process batch request results.
+   * 
+   * For more information, see
+   * https://code.google.com/p/google-api-java-client/wiki/Batch.
+   */
+  private final class BatchCallback extends JsonBatchCallback<TimelineItem> {
+    private int success = 0;
+    private int failure = 0;
+
+    @Override
+    public void onSuccess(TimelineItem item, HttpHeaders headers) throws IOException {
+      ++success;
+    }
+
+    @Override
+    public void onFailure(GoogleJsonError error, HttpHeaders headers) throws IOException {
+      ++failure;
+      LOG.info("Failed to insert item: " + error.getMessage());
+    }
+  }
+
   private static final Logger LOG = Logger.getLogger(MainServlet.class.getSimpleName());
   public static final String CONTACT_NAME = "Java Quick Start";
 
@@ -157,12 +184,20 @@ public class MainServlet extends HttpServlet {
         TimelineItem allUsersItem = new TimelineItem();
         allUsersItem.setText("Hello Everyone!");
 
+        BatchRequest batch = MirrorClient.getMirror(null).batch();
+        BatchCallback callback = new BatchCallback();
+
         // TODO: add a picture of a cat
         for (String user : users) {
           Credential userCredential = AuthUtil.getCredential(user);
-          MirrorClient.insertTimelineItem(userCredential, allUsersItem);
+          MirrorClient.getMirror(userCredential).timeline().insert(allUsersItem)
+              .queue(batch, callback);
         }
-        message = "Sent cards to " + users.size() + " users.";
+
+        batch.execute();
+        message =
+            "Successfully sent cards to " + callback.success + " users (" + callback.failure
+                + " failed).";
       }
 
 
