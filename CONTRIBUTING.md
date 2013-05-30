@@ -37,20 +37,20 @@ accept your pull requests.
 1. Sign a Contributor License Agreement, if you have not yet done so (see
    details above).
 1. Create your own repo for your app following this naming convention:
-    * gplus-{app-name}-{language}
+    * mirror-{app-name}-{language or plaform}
     * apps: quickstart, photohunt-server, photohunt-client
-    * example:  gplus-quickstart-android
+    * example:  mirror-quickstart-android
     * For multi-language apps, concatenate the primary languages like this:
-      gplus-photohunt-server-java-python.
+      mirror-photohunt-server-java-python.
 
 1. Create your sample app in this repo.
     * Be sure to clone the README.md, CONTRIBUTING.md and LICENSE files from the
-      googleplus repo.
+      googleglass repo.
     * Ensure that your code is clear and comprehensible.
     * Ensure that your code has an appropriate set of unit tests which all pass.
     * Instructional value is the top priority when evaluating new app proposals for
       this collection of repos.
-1. Submit a request to fork your repo in googleplus organization.
+1. Submit a request to fork your repo in googleglass organization.
 1. The repo owner will review your request. If it is approved, the sample will
    be merged. If it needs additional work, the repo owner will respond with 
    useful comments.
