@@ -42,13 +42,10 @@ public class AuthFilter implements Filter {
       HttpServletRequest httpRequest = (HttpServletRequest) request;
       HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-      // Redirect to https when on App Engine since subscriptions only work over
-      // https
-      if (httpRequest.getServerName().contains("appspot.com")
-          && httpRequest.getScheme().equals("http")) {
-
-        httpResponse.sendRedirect(httpRequest.getRequestURL().toString()
-            .replaceFirst("http", "https"));
+      // skip auth for static content
+      if (httpRequest.getRequestURI().startsWith("/static")) {
+        LOG.info("Skipping auth check during auth flow");
+        filterChain.doFilter(request, response);
         return;
       }
 

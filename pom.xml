@@ -20,6 +20,9 @@ limitations under the License.
   <groupId>com.google</groupId>
   <artifactId>glass-java-starter</artifactId>
   <version>0.1-SNAPSHOT</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <repositories>
     <repository>
@@ -42,16 +45,32 @@ limitations under the License.
       <version>v1-rev2-1.14.1-beta</version>
     </dependency>
 
-    <!-- App Engine -->
+     
+    <!-- Jetty plugin dependencies -->
     <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>1.7.6</version>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.1.14</version>
     </dependency>
     <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-labs</artifactId>
-      <version>1.7.6</version>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <version>6.1.14</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-plus</artifactId>
+      <version>6.1.14</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jsp-2.1</artifactId>
+      <version>6.1.14</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jsp-api-2.1</artifactId>
+      <version>6.1.14</version>
     </dependency>
 
     <!-- everything else -->
@@ -64,11 +83,6 @@ limitations under the License.
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
       <version>1.9.11</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -90,47 +104,18 @@ limitations under the License.
       <artifactId>guava</artifactId>
       <version>14.0.1</version>
     </dependency>
-
-
   </dependencies>
 
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <outputDirectory>web/WEB-INF/classes</outputDirectory>
-
-
     <plugins>
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>web/WEB-INF/lib</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>2.5</version>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.26</version>
         <configuration>
-          <filesets>
-            <fileset>
-              <directory>web/WEB-INF/lib</directory>
-              <includes>
-                <include>**/*.jar</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
+          <contextPath>/</contextPath>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -140,7 +125,6 @@ limitations under the License.
           <target>1.6</target>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>

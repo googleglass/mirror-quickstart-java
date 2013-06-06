@@ -17,8 +17,8 @@ package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 import java.io.FileInputStream;
@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class AuthUtil {
+  public static ListableMemoryCredentialStore store = new ListableMemoryCredentialStore();
   public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline "
       + "https://www.googleapis.com/auth/glass.location "
       + "https://www.googleapis.com/auth/userinfo.profile";
@@ -45,16 +46,17 @@ public class AuthUtil {
    * Creates and returns a new {@link AuthorizationCodeFlow} for this app.
    */
   public static AuthorizationCodeFlow newAuthorizationCodeFlow() throws IOException {
-    FileInputStream authPropertiesStream = new FileInputStream("oauth.properties");
+    FileInputStream authPropertiesStream =
+        new FileInputStream("./src/main/resources/oauth.properties");
     Properties authProperties = new Properties();
     authProperties.load(authPropertiesStream);
 
     String clientId = authProperties.getProperty("client_id");
     String clientSecret = authProperties.getProperty("client_secret");
 
-    return new GoogleAuthorizationCodeFlow.Builder(new UrlFetchTransport(), new JacksonFactory(),
+    return new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(),
         clientId, clientSecret, Collections.singleton(GLASS_SCOPE)).setAccessType("offline")
-        .setCredentialStore(new ListableAppEngineCredentialStore()).build();
+        .setCredentialStore(store).build();
   }
 
   /**
@@ -75,7 +77,7 @@ public class AuthUtil {
   public static void clearUserId(HttpServletRequest request) throws IOException {
     // Delete the credential in the credential store
     String userId = getUserId(request);
-    new ListableAppEngineCredentialStore().delete(userId, getCredential(userId));
+    store.delete(userId, getCredential(userId));
 
     // Remove their ID from the local session
     request.getSession().removeAttribute("userId");
@@ -94,6 +96,6 @@ public class AuthUtil {
   }
 
   public static List<String> getAllUserIds() {
-    return new ListableAppEngineCredentialStore().listAllUsers();
+    return store.listAllUsers();
   }
 }

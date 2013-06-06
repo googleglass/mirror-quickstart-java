@@ -16,11 +16,11 @@
 package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.mirror.Mirror;
 import com.google.api.services.mirror.model.Attachment;
@@ -45,7 +45,7 @@ public class MirrorClient {
   private static final Logger LOG = Logger.getLogger(MirrorClient.class.getSimpleName());
 
   public static Mirror getMirror(Credential credential) {
-    return new Mirror.Builder(new UrlFetchTransport(), new JacksonFactory(), credential)
+    return new Mirror.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
         .setApplicationName("PG Java Starter").build();
   }
 

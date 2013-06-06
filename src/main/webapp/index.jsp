@@ -45,10 +45,10 @@ limitations under the License.
 
   if (subscriptions != null) {
     for (Subscription subscription : subscriptions) {
-      if (subscription.getId().equals("timeline")) {
+      if (subscription.getId().equals("")) {
         timelineSubscriptionExists = true;
       }
-      if (subscription.getId().equals("locations")) {
+      if (subscription.getId().equals("")) {
         locationSubscriptionExists = true;
       }
     }
@@ -122,7 +122,7 @@ limitations under the License.
           <%
           if (timelineItem.getAttachments() != null) {
             for (Attachment attachment : timelineItem.getAttachments()) {
-              if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("image")) { %>
+              if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("")) { %>
           <img src="<%= appBaseUrl + "attachmentproxy?attachment=" +
             attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">
           <% } else { %>
