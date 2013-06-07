@@ -170,6 +170,13 @@ limitations under the License.
         </button>
       </form>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+        <input type="hidden" name="operation" value="insertVideo">
+        <input type="hidden" name="message" value="Sweetie says 'hi'!">
+        <button class="btn" type="submit">A video
+          <img class="button-icon" src="<%= appBaseUrl +
+               "static/images/sweetie-wobbly-cat-326x134.png" %>">
+      </form>
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItemWithAction">
         <button class="btn" type="submit">A card you can reply to</button>
       </form>
