@@ -33,12 +33,21 @@ limitations under the License.
 
   Credential credential = com.google.glassware.AuthUtil.getCredential(userId);
 
-  Contact contact = MirrorClient.getContact(credential, MainServlet.CONTACT_NAME);
+  Contact contact = null;
+  List<TimelineItem> timelineItems = null;
+  List<Subscription> subscriptions = null;
 
-  List<TimelineItem> timelineItems = MirrorClient.listItems(credential, 3L).getItems();
+  try {
+    contact = MirrorClient.getContact(credential, MainServlet.CONTACT_NAME);
+    timelineItems = MirrorClient.listItems(credential, 3L).getItems();
+    subscriptions = MirrorClient.listSubscriptions(credential).getItems();
+  } catch(com.google.api.client.auth.oauth2.TokenResponseException e) {
+    com.google.glassware.AuthUtil.clearUserId(request);
+    // redirect to auth flow
+    response.sendRedirect(WebUtil.buildUrl(request, "/oauth2callback"));
+    return;
+  }
 
-
-  List<Subscription> subscriptions = MirrorClient.listSubscriptions(credential).getItems();
   boolean timelineSubscriptionExists = false;
   boolean locationSubscriptionExists = false;
 
