@@ -15,6 +15,17 @@
  */
 package com.google.glassware;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
@@ -27,16 +38,7 @@ import com.google.api.services.mirror.model.MenuValue;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
 import com.google.common.collect.Lists;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.google.common.io.ByteStreams;
 
 /**
  * Handles POST requests from index.jsp
@@ -121,7 +123,20 @@ public class MainServlet extends HttpServlet {
       }
 
       message = "A timeline item has been inserted.";
-
+    
+    } else if(req.getParameter("operation").equals("insertVideo")) {
+        TimelineItem timelineItem = new TimelineItem();
+        timelineItem.setText("Sweetie the wobbly cat");
+    	// Attach a video, if we have one
+		String contentType = req.getParameter("contentType");
+		URL url = new URL("http://localhost:8888/static/videos/sweetie-wobbly-cat-720p.mp4");
+		//video/* won't work, use video/mp4
+		contentType = "video/mp4";
+		byte[] b = ByteStreams.toByteArray(url.openStream());
+		int i = b.length;
+		InputStream temp = url.openStream();
+		MirrorClient.insertTimelineItem(credential, timelineItem,
+				contentType, temp);
     } else if (req.getParameter("operation").equals("insertItemWithAction")) {
       LOG.fine("Inserting Timeline Item");
       TimelineItem timelineItem = new TimelineItem();
