@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 /**
  * A facade for easier access to basic API operations
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class MirrorClient {
@@ -119,9 +119,9 @@ public class MirrorClient {
 
   /**
    * Inserts a simple timeline item.
-   * 
+   *
    * @param credential the user's credential
-   * @param item the item to insert
+   * @param item       the item to insert
    */
   public static TimelineItem insertTimelineItem(Credential credential, TimelineItem item)
       throws IOException {
@@ -130,12 +130,12 @@ public class MirrorClient {
 
   /**
    * Inserts an item with an attachment provided as a byte array.
-   * 
-   * @param credential the user's credential
-   * @param item the item to insert
+   *
+   * @param credential            the user's credential
+   * @param item                  the item to insert
    * @param attachmentContentType the MIME type of the attachment (or null if
-   *        none)
-   * @param attachmentData data for the attachment (or null if none)
+   *                              none)
+   * @param attachmentData        data for the attachment (or null if none)
    */
   public static void insertTimelineItem(Credential credential, TimelineItem item,
       String attachmentContentType, byte[] attachmentData) throws IOException {
@@ -146,13 +146,13 @@ public class MirrorClient {
 
   /**
    * Inserts an item with an attachment provided as an input stream.
-   * 
-   * @param credential the user's credential
-   * @param item the item to insert
+   *
+   * @param credential            the user's credential
+   * @param item                  the item to insert
    * @param attachmentContentType the MIME type of the attachment (or null if
-   *        none)
+   *                              none)
    * @param attachmentInputStream input stream for the attachment (or null if
-   *        none)
+   *                              none)
    */
   public static void insertTimelineItem(Credential credential, TimelineItem item,
       String attachmentContentType, InputStream attachmentInputStream) throws IOException {

@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Handles the notifications sent back from subscriptions
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class NotifyServlet extends HttpServlet {
@@ -69,7 +69,7 @@ public class NotifyServlet extends HttpServlet {
       lines++;
 
       // No notification would ever be this long. Something is very wrong.
-      if(lines > 1000) {
+      if (lines > 1000) {
         throw new IOException("Attempted to parse notification payload that was unexpectedly long.");
       }
     }

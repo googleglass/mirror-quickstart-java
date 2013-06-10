@@ -45,10 +45,10 @@ limitations under the License.
 
   if (subscriptions != null) {
     for (Subscription subscription : subscriptions) {
-      if (subscription.getId().equals("")) {
+      if (subscription.getId().equals("timeline")) {
         timelineSubscriptionExists = true;
       }
-      if (subscription.getId().equals("")) {
+      if (subscription.getId().equals("location")) {
         locationSubscriptionExists = true;
       }
     }

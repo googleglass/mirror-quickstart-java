@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Allows logged in users to view their timeline item attachments by proxying
  * their app engine session to their OAuth session.
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class AttachmentProxyServlet extends HttpServlet {

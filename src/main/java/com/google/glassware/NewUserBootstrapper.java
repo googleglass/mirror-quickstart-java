@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Utility functions used when users first authenticate with this service
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class NewUserBootstrapper {
@@ -61,7 +61,8 @@ public class NewUserBootstrapper {
       Subscription subscription =
           MirrorClient.insertSubscription(credential, WebUtil.buildUrl(req, "/notify"), userId,
               "timeline");
-      LOG.info("Bootstrapper inserted subscription " + subscription.getId() + " for user " + userId);
+      LOG.info("Bootstrapper inserted subscription " + subscription
+          .getId() + " for user " + userId);
     } catch (GoogleJsonResponseException e) {
       LOG.warning("Failed to create timeline subscription. Might be running on "
           + "localhost. Details:" + e.getDetails().toPrettyString());

@@ -40,14 +40,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Handles POST requests from index.jsp
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class MainServlet extends HttpServlet {
 
   /**
    * Private class to process batch request results.
-   * 
+   * <p/>
    * For more information, see
    * https://code.google.com/p/google-api-java-client/wiki/Batch.
    */

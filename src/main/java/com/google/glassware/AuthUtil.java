@@ -33,7 +33,7 @@ import javax.servlet.http.HttpSession;
 /**
  * A collection of utility functions that simplify common authentication and
  * user identity tasks
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class AuthUtil {
@@ -61,7 +61,7 @@ public class AuthUtil {
 
   /**
    * Get the current user's ID from the session
-   * 
+   *
    * @return string user id or null if no one is logged in
    */
   public static String getUserId(HttpServletRequest request) {

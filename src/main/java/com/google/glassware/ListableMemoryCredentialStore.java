@@ -27,15 +27,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * A new credential store. It's exactly the same as
  * com.google.api.client.auth.oauth2.MemoryCredentialStore except it
  * has the added ability to list all of the users.
- * 
+ *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class ListableMemoryCredentialStore implements CredentialStore {
 
-  /** Lock on access to the store. */
+  /**
+   * Lock on access to the store.
+   */
   private final Lock lock = new ReentrantLock();
 
-  /** Store of memory persisted credentials, indexed by userId. */
+  /**
+   * Store of memory persisted credentials, indexed by userId.
+   */
   private final Map<String, MemoryPersistedCredential> store =
       new HashMap<String, MemoryPersistedCredential>();
 
@@ -78,8 +82,9 @@ public class ListableMemoryCredentialStore implements CredentialStore {
   public List<String> listAllUsers() {
     List<String> allUsers = new ArrayList<String>();
     // Is that a 47 character long generic for one line of behavior? Yes, yes it is.
-    for(Iterator<Map.Entry<String, MemoryPersistedCredential>> iterator = store.entrySet().iterator();
-        iterator.hasNext();) {
+    for (Iterator<Map.Entry<String, MemoryPersistedCredential>> iterator = store.entrySet()
+        .iterator();
+         iterator.hasNext(); ) {
       allUsers.add(iterator.next().getKey());
     }
     return allUsers;
@@ -87,21 +92,27 @@ public class ListableMemoryCredentialStore implements CredentialStore {
 
   class MemoryPersistedCredential {
 
-    /** Access token or {@code null} for none. */
+    /**
+     * Access token or {@code null} for none.
+     */
     private String accessToken;
 
-    /** Refresh token {@code null} for none. */
+    /**
+     * Refresh token {@code null} for none.
+     */
     private String refreshToken;
 
-    /** Expiration time in milliseconds {@code null} for none. */
+    /**
+     * Expiration time in milliseconds {@code null} for none.
+     */
     private Long expirationTimeMillis;
 
     /**
      * Store information from the credential.
      *
      * @param credential credential whose {@link Credential#getAccessToken access token},
-     *        {@link Credential#getRefreshToken refresh token}, and
-     *        {@link Credential#getExpirationTimeMilliseconds expiration time} need to be stored
+     *                   {@link Credential#getRefreshToken refresh token}, and
+     *                   {@link Credential#getExpirationTimeMilliseconds expiration time} need to be stored
      */
     void store(Credential credential) {
       accessToken = credential.getAccessToken();
@@ -113,9 +124,9 @@ public class ListableMemoryCredentialStore implements CredentialStore {
      * Load information into the credential.
      *
      * @param credential credential whose {@link Credential#setAccessToken access token},
-     *        {@link Credential#setRefreshToken refresh token}, and
-     *        {@link Credential#setExpirationTimeMilliseconds expiration time} need to be set if the
-     *        credential already exists in storage
+     *                   {@link Credential#setRefreshToken refresh token}, and
+     *                   {@link Credential#setExpirationTimeMilliseconds expiration time} need to be set if the
+     *                   credential already exists in storage
      */
     void load(Credential credential) {
       credential.setAccessToken(accessToken);

@@ -35,7 +35,7 @@ public class WebUtil {
 
   /**
    * A simple flash implementation for text messages across requests
-   * 
+   *
    * @param request
    * @return
    */
