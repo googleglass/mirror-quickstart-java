@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class NotifyServlet extends HttpServlet {
-  private static final Logger LOG = Logger.getLogger(MainServlet.class.getSimpleName());
+  private static final Logger LOG = Logger.getLogger(NotifyServlet.class.getSimpleName());
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)

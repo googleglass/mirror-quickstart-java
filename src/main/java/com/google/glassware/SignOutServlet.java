@@ -22,6 +22,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * A development tool for clearing the auth information for a user. In production, let MyGlass
+ * handle this instead.
+ *
+ * @author Jenny Murphy - http://google.com/+JennyMurphy
+ */
 public class SignOutServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
@@ -29,7 +35,5 @@ public class SignOutServlet extends HttpServlet {
     // It'd be nice to do some XSRF validation here
     AuthUtil.clearUserId(req);
     resp.getWriter().write("You have been signed out.");
-
-    // If you are logged into other services, clear their sessions here :)
   }
 }
