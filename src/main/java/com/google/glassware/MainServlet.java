@@ -201,6 +201,14 @@ public class MainServlet extends HttpServlet {
       }
 
 
+    } else if (req.getParameter("operation").equals("deleteTimelineItem")) {
+
+      // Delete a timeline item
+      LOG.fine("Deleting Timeline Item");
+      MirrorClient.deleteTimelineItem(credential, req.getParameter("itemId"));
+
+      message = "Timeline Item has been deleted.";
+
     } else {
       String operation = req.getParameter("operation");
       LOG.warning("Unknown operation specified " + operation);
