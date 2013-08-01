@@ -132,6 +132,13 @@ limitations under the License.
             }
           } %>
         </li>
+        <li>
+          <form action="/" method="post">
+            <input type="hidden" name="itemId" value="<%= timelineItem.getId() %>">
+            <input type="hidden" name="operation" value="deleteTimelineItem">
+            <button class="btn" type="submit">Delete Item</button>
+          </form>
+        </li>
 
       </ul>
       <% }

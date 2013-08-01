@@ -177,4 +177,8 @@ public class MirrorClient {
     Attachment attachmentMetadata = attachments.get(timelineItemId, attachmentId).execute();
     return attachmentMetadata.getContentType();
   }
+
+  public static void deleteTimelineItem(Credential credential, String timelineItemId) throws IOException {
+    getMirror(credential).timeline().delete(timelineItemId).execute();    
+  }
 }
