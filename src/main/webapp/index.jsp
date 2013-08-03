@@ -83,13 +83,6 @@ limitations under the License.
   <div class="navbar-inner">
     <div class="container">
       <a class="brand" href="#">Glassware Starter Project: Java Edition</a>
-
-      <div class="nav-collapse collapse">
-        <form class="navbar-form pull-right" action="/signout" method="post">
-          <button type="submit" class="btn">Sign out</button>
-        </form>
-      </div>
-      <!--/.nav-collapse -->
     </div>
   </div>
 </div>

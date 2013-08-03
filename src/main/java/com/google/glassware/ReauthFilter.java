@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2013 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -14,6 +14,8 @@
  * the License.
  */
 package com.google.glassware;
+
+import com.google.api.client.auth.oauth2.TokenResponseException;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -28,43 +30,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * A filter which ensures that prevents unauthenticated users from accessing the
- * web app
+ * A filter which reacts to invalid grant_auth exceptions, typically caused when a user toggles a
+ * Glassware 'off' on MyGlass. It redirects to the login flow when this happens.
  *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
-public class AuthFilter implements Filter {
-  private static final Logger LOG = Logger.getLogger(AuthFilter.class.getSimpleName());
+public class ReauthFilter implements Filter {
+  private static final Logger LOG = Logger.getLogger(ReauthFilter.class.getSimpleName());
 
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-      throws IOException, ServletException {
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response,
+      FilterChain filterChain) throws IOException, ServletException {
+
+    // Skip this filter if somehow we have a request that's not HTTP
     if (response instanceof HttpServletResponse && request instanceof HttpServletRequest) {
       HttpServletRequest httpRequest = (HttpServletRequest) request;
       HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-      // skip auth for static content, middle of auth flow, notify servlet
-      if (httpRequest.getRequestURI().startsWith("/static") ||
-          httpRequest.getRequestURI().equals("/oauth2callback") ||
-          httpRequest.getRequestURI().equals("/notify")) {
-        LOG.info("Skipping auth check during auth flow");
+      // Attempt to re-auth if we have an invalid grant exception.
+      // This will only work if the request has not yet been committed.
+      try {
         filterChain.doFilter(request, response);
-        return;
+      } catch (TokenResponseException e) {
+        if (e.getDetails().getError().contains("invalid_grant")) {
+          LOG.warning("User disabled Glassware. Attempting to re-authenticate");
+          httpResponse.sendRedirect(WebUtil.buildUrl(httpRequest, "/oauth2callback"));
+        }
       }
-
-      LOG.fine("Checking to see if anyone is logged in");
-      if (AuthUtil.getUserId(httpRequest) == null
-          || AuthUtil.getCredential(AuthUtil.getUserId(httpRequest)) == null
-          || AuthUtil.getCredential(AuthUtil.getUserId(httpRequest)).getAccessToken() == null) {
-        // redirect to auth flow
-        httpResponse.sendRedirect(WebUtil.buildUrl(httpRequest, "/oauth2callback"));
-        return;
-      }
-
-      // Things checked out OK :)
-      filterChain.doFilter(request, response);
-    } else {
-      LOG.warning("Unexpected non HTTP servlet response. Proceeding anyway.");
-      filterChain.doFilter(request, response);
     }
   }
 
