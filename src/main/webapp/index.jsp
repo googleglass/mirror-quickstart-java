@@ -23,6 +23,7 @@ limitations under the License.
 <%@ page import="com.google.api.services.mirror.model.Subscription" %>
 <%@ page import="com.google.api.services.mirror.model.Attachment" %>
 <%@ page import="com.google.glassware.MainServlet" %>
+<%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -94,7 +95,7 @@ limitations under the License.
     <h1>Your Recent Timeline</h1>
     <% String flash = WebUtil.getClearFlash(request);
       if (flash != null) { %>
-    <span class="label label-warning">Message: <%= flash %> </span>
+    <span class="label label-warning">Message: <%= StringEscapeUtils.escapeHtml4(flash) %> </span>
     <% } %>
 
     <div style="margin-top: 5px;">
@@ -105,10 +106,10 @@ limitations under the License.
         <li><strong>ID: </strong> <%= timelineItem.getId() %>
         </li>
         <li>
-          <strong>Text: </strong> <%= timelineItem.getText() %>
+          <strong>Text: </strong> <%= StringEscapeUtils.escapeHtml4(timelineItem.getText()) %>
         </li>
         <li>
-          <strong>HTML: </strong> <%= timelineItem.getHtml() %>
+          <strong>HTML: </strong> <%= StringEscapeUtils.escapeHtml4(timelineItem.getHtml()) %>
         </li>
         <li>
           <strong>Attachments: </strong>
@@ -126,10 +127,10 @@ limitations under the License.
           } %>
         </li>
         <li>
-          <form action="/" method="post">
+          <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
             <input type="hidden" name="itemId" value="<%= timelineItem.getId() %>">
             <input type="hidden" name="operation" value="deleteTimelineItem">
-            <button class="btn" type="submit">Delete Item</button>
+            <button class="btn" type="submit">Delete</button>
           </form>
         </li>
 

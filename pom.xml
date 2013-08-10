@@ -37,16 +37,15 @@ limitations under the License.
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-mirror</artifactId>
-      <version>v1-rev11-1.15.0-rc</version>
+      <version>v1-rev18-1.16.0-rc</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client-jackson2</artifactId>
-      <version>1.15.0-rc</version>
+      <version>1.16.0-rc</version>
     </dependency>
 
-
-      <!-- Jetty plugin dependencies -->
+    <!-- Jetty plugin dependencies -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
@@ -74,6 +73,11 @@ limitations under the License.
     </dependency>
 
     <!-- everything else -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
