@@ -77,16 +77,6 @@ limitations under the License.
     <url-pattern>/attachmentproxy</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>signout</servlet-name>
-    <servlet-class>com.google.glassware.SignOutServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>signout</servlet-name>
-    <url-pattern>/signout</url-pattern>
-  </servlet-mapping>
-
-
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
