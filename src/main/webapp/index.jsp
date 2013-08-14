@@ -17,8 +17,7 @@ limitations under the License.
 <%@ page import="com.google.api.services.mirror.model.Contact" %>
 <%@ page import="com.google.glassware.MirrorClient" %>
 <%@ page import="com.google.glassware.WebUtil" %>
-<%@ page
-    import="java.util.List" %>
+<%@ page import="java.util.List" %>
 <%@ page import="com.google.api.services.mirror.model.TimelineItem" %>
 <%@ page import="com.google.api.services.mirror.model.Subscription" %>
 <%@ page import="com.google.api.services.mirror.model.Attachment" %>
@@ -62,22 +61,9 @@ limitations under the License.
   <title>Glassware Starter Project</title>
   <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"
         media="screen">
-
-  <style>
-    .button-icon {
-      max-width: 75px;
-    }
-
-    .tile {
-      border-left: 1px solid #444;
-      padding: 5px;
-      list-style: none;
-    }
-
-    .btn {
-      width: 100%;
-    }
-  </style>
+  <link href="/static/bootstrap/css/bootstrap-responsive.min.css"
+        rel="stylesheet" media="screen">
+  <link href="/static/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -90,58 +76,85 @@ limitations under the License.
 
 <div class="container">
 
-  <!-- Main hero unit for a primary marketing message or call to action -->
-  <div class="hero-unit">
-    <h1>Your Recent Timeline</h1>
-    <% String flash = WebUtil.getClearFlash(request);
-      if (flash != null) { %>
-    <span class="label label-warning">Message: <%= StringEscapeUtils.escapeHtml4(flash) %> </span>
-    <% } %>
+  <% String flash = WebUtil.getClearFlash(request);
+    if (flash != null) { %>
+  <div class="alert alert-info"><%= StringEscapeUtils.escapeHtml4(flash) %></div>
+  <% } %>
+
+  <h1>Your Recent Timeline</h1>
+  <div class="row">
 
     <div style="margin-top: 5px;">
 
-      <% if (timelineItems != null) {
+      <% if (timelineItems != null && !timelineItems.isEmpty()) {
         for (TimelineItem timelineItem : timelineItems) { %>
-      <ul class="span3 tile">
-        <li><strong>ID: </strong> <%= timelineItem.getId() %>
-        </li>
-        <li>
-          <strong>Text: </strong> <%= StringEscapeUtils.escapeHtml4(timelineItem.getText()) %>
-        </li>
-        <li>
-          <strong>HTML: </strong> <%= StringEscapeUtils.escapeHtml4(timelineItem.getHtml()) %>
-        </li>
-        <li>
-          <strong>Attachments: </strong>
-          <%
-          if (timelineItem.getAttachments() != null) {
-            for (Attachment attachment : timelineItem.getAttachments()) {
-              if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("")) { %>
-          <img src="<%= appBaseUrl + "attachmentproxy?attachment=" +
-            attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">
-          <% } else { %>
-          <a href="<%= appBaseUrl + "attachmentproxy?attachment=" +
-            attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">Download</a>
-          <% }
-            }
-          } %>
-        </li>
-        <li>
-          <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
-            <input type="hidden" name="itemId" value="<%= timelineItem.getId() %>">
-            <input type="hidden" name="operation" value="deleteTimelineItem">
-            <button class="btn" type="submit">Delete</button>
-          </form>
-        </li>
-
-      </ul>
+      <div class="span4">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td><%= timelineItem.getId() %></td>
+            </tr>
+            <tr>
+              <th>Text</th>
+              <td><%= StringEscapeUtils.escapeHtml4(timelineItem.getText()) %></td>
+            </tr>
+            <tr>
+              <th>HTML</th>
+              <td><%= StringEscapeUtils.escapeHtml4(timelineItem.getHtml()) %></td>
+            </tr>
+            <tr>
+              <th>Attachments</th>
+              <td>
+                <%
+                if (timelineItem.getAttachments() != null) {
+                  for (Attachment attachment : timelineItem.getAttachments()) {
+                    if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("")) { %>
+                <img src="<%= appBaseUrl + "attachmentproxy?attachment=" +
+                  attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">
+                <%  } else { %>
+                <a href="<%= appBaseUrl + "attachmentproxy?attachment=" +
+                  attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">
+                  Download</a>
+                <%  }
+                  }
+                } else { %>
+                <span class="muted">None</span>
+                <% } %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <form class="form-inline"
+                      action="<%= WebUtil.buildUrl(request, "/main") %>"
+                      method="post">
+                  <input type="hidden" name="itemId"
+                         value="<%= timelineItem.getId() %>">
+                  <input type="hidden" name="operation"
+                         value="deleteTimelineItem">
+                  <button class="btn btn-block btn-danger"
+                          type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <% }
-      } %>
+      } else { %>
+      <div class="span12">
+        <div class="alert alert-info">
+          You haven't added any items to your timeline yet. Use the controls
+          below to add something!
+        </div>
+      </div>
+      <% } %>
     </div>
     <div style="clear:both;"></div>
   </div>
 
-  <!-- Example row of columns -->
+  <hr/>
+
   <div class="row">
     <div class="span4">
       <h2>Timeline</h2>
@@ -149,13 +162,15 @@ limitations under the License.
       <p>When you first sign in, this Glassware inserts a welcome message. Use
         these controls to insert more items into your timeline. Learn more about
         the timeline APIs
-        <a href="https://developers.google.com/glass/timeline">here</a></p>
+        <a href="https://developers.google.com/glass/timeline">here</a>.</p>
 
 
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItem">
-        <textarea name="message">Hello World!</textarea><br/>
-        <button class="btn" type="submit">The above message</button>
+        <textarea class="span4" name="message">Hello World!</textarea><br/>
+        <button class="btn btn-block" type="submit">
+          Insert the above message
+        </button>
       </form>
 
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
@@ -165,21 +180,22 @@ limitations under the License.
                "static/images/chipotle-tube-640x360.jpg" %>">
         <input type="hidden" name="contentType" value="image/jpeg">
 
-        <button class="btn" type="submit">A picture
+        <button class="btn btn-block" type="submit">Insert a picture
           <img class="button-icon" src="<%= appBaseUrl +
                "static/images/chipotle-tube-640x360.jpg" %>">
         </button>
       </form>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItemWithAction">
-        <button class="btn" type="submit">A card you can reply to</button>
+        <button class="btn btn-block" type="submit">
+          Insert a card you can reply to</button>
       </form>
       <hr>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItemAllUsers">
-        <button class="btn" type="submit">A card to all users</button>
+        <button class="btn btn-block" type="submit">
+          Insert a card to all users</button>
       </form>
-
     </div>
 
     <div class="span4">
@@ -190,22 +206,22 @@ limitations under the License.
         <a href="https://developers.google.com/glass/contacts">here</a>.</p>
 
       <% if (contact == null) { %>
-      <form class="span3" action="<%= WebUtil.buildUrl(request, "/main") %>"
-            method="post">
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertContact">
         <input type="hidden" name="iconUrl" value="<%= appBaseUrl +
                "static/images/chipotle-tube-640x360.jpg" %>">
         <input type="hidden" name="name"
                value="<%= MainServlet.CONTACT_NAME %>">
-        <button class="btn" type="submit">Insert Java Quick Start Contact
+        <button class="btn btn-block btn-success" type="submit">
+          Insert Java Quick Start Contact
         </button>
       </form>
       <% } else { %>
-      <form class="span3" action="<%= WebUtil.buildUrl(request, "/main") %>"
-            method="post">
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="deleteContact">
         <input type="hidden" name="id" value="<%= MainServlet.CONTACT_NAME %>">
-        <button class="btn" type="submit">Delete Java Quick Start Contact
+        <button class="btn btn-block btn-danger" type="submit">
+          Delete Java Quick Start Contact
         </button>
       </form>
       <% } %>
@@ -216,9 +232,9 @@ limitations under the License.
 
       <p>By default a subscription is inserted for changes to the
         <code>timeline</code> collection. Learn more about subscriptions
-        <a href="https://developers.google.com/glass/subscriptions">here</a></p>
+        <a href="https://developers.google.com/glass/subscriptions">here</a>.</p>
 
-      <p class="label label-info">Note: Subscriptions require SSL. <br>They will
+      <p class="alert alert-info">Note: Subscriptions require SSL. They will
         not work on localhost.</p>
 
       <% if (timelineSubscriptionExists) { %>
@@ -226,34 +242,38 @@ limitations under the License.
             method="post">
         <input type="hidden" name="subscriptionId" value="timeline">
         <input type="hidden" name="operation" value="deleteSubscription">
-        <button class="btn" type="submit" class="delete">Unsubscribe from
-          timeline updates
+        <button class="btn btn-block btn-danger" type="submit" class="delete">
+          Unsubscribe from timeline updates
         </button>
       </form>
       <% } else { %>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertSubscription">
         <input type="hidden" name="collection" value="timeline">
-        <button class="btn" type="submit">Subscribe to timeline updates</button>
+        <button class="btn btn-block btn-success" type="submit">
+          Subscribe to timeline updates
+        </button>
       </form>
-      <% }%>
+      <% } %>
 
       <% if (locationSubscriptionExists) { %>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>"
             method="post">
         <input type="hidden" name="subscriptionId" value="locations">
         <input type="hidden" name="operation" value="deleteSubscription">
-        <button class="btn" type="submit" class="delete">Unsubscribe from
-          location updates
+        <button class="btn btn-block btn-danger" type="submit" class="delete">
+          Unsubscribe from location updates
         </button>
       </form>
       <% } else { %>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertSubscription">
         <input type="hidden" name="collection" value="locations">
-        <button class="btn" type="submit">Subscribe to location updates</button>
+        <button class="btn btn-block btn-success" type="submit">
+          Subscribe to location updates
+        </button>
       </form>
-      <% }%>
+      <% } %>
     </div>
   </div>
 </div>

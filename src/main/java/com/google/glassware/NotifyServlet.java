@@ -111,25 +111,26 @@ public class NotifyServlet extends HttpServlet {
       TimelineItem timelineItem = mirrorClient.timeline().get(notification.getItemId()).execute();
       LOG.info("Notification impacted timeline item with ID: " + timelineItem.getId());
 
-      // If it was a share, and contains a photo, bounce it back to the user.
+      // If it was a share, and contains a photo, update the photo's caption to
+      // acknowledge that we got it.
       if (notification.getUserActions().contains(new UserAction().setType("SHARE"))
           && timelineItem.getAttachments() != null && timelineItem.getAttachments().size() > 0) {
-        LOG.info("It was a share of a photo. Sending the photo back to the user.");
+        LOG.info("It was a share of a photo. Updating the caption on the photo.");
 
-        // Get the first attachment
-        String attachmentId = timelineItem.getAttachments().get(0).getId();
-        LOG.info("Found attachment with ID " + attachmentId);
+        String caption = timelineItem.getText();
+        if (caption == null) {
+          caption = "";
+        }
 
-        // Get the attachment content
-        InputStream stream =
-            MirrorClient.getAttachmentInputStream(credential, timelineItem.getId(), attachmentId);
+        // Create a new item with just the values that we want to patch.
+        TimelineItem itemPatch = new TimelineItem();
+        itemPatch.setText("Java Quick Start got your photo! " + caption);
 
-        // Create a new timeline item with the attachment
-        TimelineItem echoPhotoItem = new TimelineItem();
-        echoPhotoItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));
-        echoPhotoItem.setText("Echoing your shared photo");
-
-        MirrorClient.insertTimelineItem(credential, echoPhotoItem, "image/jpeg", stream);
+        // Patch the item. Notice that since we retrieved the entire item above
+        // in order to access the caption, we could have just changed the text
+        // in place and used the update method, but we wanted to illustrate the
+        // patch method here.
+        mirrorClient.timeline().patch(notification.getItemId(), itemPatch).execute();
 
       } else {
         LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
