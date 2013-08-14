@@ -24,20 +24,12 @@ limitations under the License.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>maven-gae-plugin-repo</id>
-      <name>maven-gae-plugin repository</name>
-      <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
-    </repository>
-  </repositories>
-
   <dependencies>
     <!-- Java Google API Client Library -->
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-mirror</artifactId>
-      <version>v1-rev18-1.16.0-rc</version>
+      <version>v1-rev20-1.16.0-rc</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
