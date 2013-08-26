@@ -100,7 +100,8 @@ public class NotifyServlet extends HttpServlet {
       MirrorClient.insertTimelineItem(
           credential,
           new TimelineItem()
-              .setText("You are now at " + location.getLatitude() + ", " + location.getLongitude())
+              .setText("Java Quick Start says you are now at " + location.getLatitude()
+                  + " by " + location.getLongitude())
               .setNotification(new NotificationConfig().setLevel("DEFAULT")).setLocation(location)
               .setMenuItems(Lists.newArrayList(new MenuItem().setAction("NAVIGATE"))));
 
