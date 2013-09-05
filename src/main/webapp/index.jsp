@@ -33,7 +33,7 @@ limitations under the License.
 
   Credential credential = com.google.glassware.AuthUtil.getCredential(userId);
 
-  Contact contact = MirrorClient.getContact(credential, MainServlet.CONTACT_NAME);
+  Contact contact = MirrorClient.getContact(credential, MainServlet.CONTACT_ID);
 
   List<TimelineItem> timelineItems = MirrorClient.listItems(credential, 3L).getItems();
 
@@ -160,8 +160,8 @@ limitations under the License.
       <h2>Timeline</h2>
 
       <p>When you first sign in, this Glassware inserts a welcome message. Use
-        these controls to insert more items into your timeline. Learn more about
-        the timeline APIs
+        these controls to insert more items into your timeline. Learn more
+        about the timeline APIs
         <a href="https://developers.google.com/glass/timeline">here</a>.</p>
 
 
@@ -184,6 +184,11 @@ limitations under the License.
           <img class="button-icon" src="<%= appBaseUrl +
                "static/images/chipotle-tube-640x360.jpg" %>">
         </button>
+      </form>
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+        <input type="hidden" name="operation" value="insertPaginatedItem">
+        <button class="btn btn-block" type="submit">
+          Insert a card with long paginated HTML</button>
       </form>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItemWithAction">
@@ -210,6 +215,8 @@ limitations under the License.
         <input type="hidden" name="operation" value="insertContact">
         <input type="hidden" name="iconUrl" value="<%= appBaseUrl +
                "static/images/chipotle-tube-640x360.jpg" %>">
+        <input type="hidden" name="id"
+               value="<%= MainServlet.CONTACT_ID %>">
         <input type="hidden" name="name"
                value="<%= MainServlet.CONTACT_NAME %>">
         <button class="btn btn-block btn-success" type="submit">
@@ -219,12 +226,19 @@ limitations under the License.
       <% } else { %>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="deleteContact">
-        <input type="hidden" name="id" value="<%= MainServlet.CONTACT_NAME %>">
+        <input type="hidden" name="id" value="<%= MainServlet.CONTACT_ID %>">
         <button class="btn btn-block btn-danger" type="submit">
           Delete Java Quick Start Contact
         </button>
       </form>
       <% } %>
+
+      <h3>Voice Commands</h3>
+      <p>The "Java Quick Start" contact can also accept the <strong>take a
+        note</strong> command. Take a note with the "Java Quick Start" contact
+        and give your opinion on cats. The quick start recognizes the
+        statements <strong>cats are cute</strong> and <strong>cats are
+        mean</strong>, but you can try saying anything else as well.</p>
     </div>
 
     <div class="span4">
@@ -232,7 +246,8 @@ limitations under the License.
 
       <p>By default a subscription is inserted for changes to the
         <code>timeline</code> collection. Learn more about subscriptions
-        <a href="https://developers.google.com/glass/subscriptions">here</a>.</p>
+        <a href="https://developers.google.com/glass/subscriptions">here</a>.
+      </p>
 
       <p class="alert alert-info">Note: Subscriptions require SSL. They will
         not work on localhost.</p>

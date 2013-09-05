@@ -132,10 +132,41 @@ public class NotifyServlet extends HttpServlet {
         // in place and used the update method, but we wanted to illustrate the
         // patch method here.
         mirrorClient.timeline().patch(notification.getItemId(), itemPatch).execute();
+      } else if (notification.getUserActions().contains(new UserAction().setType("LAUNCH"))) {
+        LOG.info("It was a note taken with the 'take a note' voice command. Processing it.");
 
+        // Grab the spoken text from the timeline card and update the card with
+        // an HTML response (deleting the text as well).
+        String noteText = timelineItem.getText();
+
+        if ("cats are cute".equals(noteText)) {
+          timelineItem.setHtml(makeHtmlForCard("<p>"
+              + "Awww, you think cats are cute! <em class='green'>Purrrr... meow....</em></p>"));
+        } else if ("cats are mean".equals(noteText)) {
+          timelineItem.setHtml(makeHtmlForCard("<p>"
+              + "What? You think cats are mean? <em class='red'>Hissss... scratch...</em></p>"));
+        } else {
+          timelineItem.setHtml(makeHtmlForCard("<p>"
+              + "Cat doesn't understand the note you left: <em>" + noteText + "</em></p>"));
+        }
+
+        timelineItem.setText(null);
+        mirrorClient.timeline().update(timelineItem.getId(), timelineItem).execute();
       } else {
         LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
       }
     }
+  }
+
+  /**
+   * Wraps some HTML content in article/section tags and adds a footer
+   * identifying the card as originating from the Java Quick Start.
+   *
+   * @param content the HTML content to wrap
+   * @return the wrapped HTML content
+   */
+  private static String makeHtmlForCard(String content) {
+    return "<article><section>" + content + "</section>"
+        + "<footer><p>Java Quick Start</p></footer></article>";
   }
 }

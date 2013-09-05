@@ -17,6 +17,7 @@ package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.services.mirror.model.Command;
 import com.google.api.services.mirror.model.Contact;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.Subscription;
@@ -49,10 +50,12 @@ public class NewUserBootstrapper {
 
     // Create contact
     Contact starterProjectContact = new Contact();
-    starterProjectContact.setId(MainServlet.CONTACT_NAME);
+    starterProjectContact.setId(MainServlet.CONTACT_ID);
     starterProjectContact.setDisplayName(MainServlet.CONTACT_NAME);
     starterProjectContact.setImageUrls(Lists.newArrayList(WebUtil.buildUrl(req,
         "/static/images/chipotle-tube-640x360.jpg")));
+    starterProjectContact.setAcceptCommands(Lists.newArrayList(
+        new Command().setType("TAKE_A_NOTE")));
     Contact insertedContact = MirrorClient.insertContact(credential, starterProjectContact);
     LOG.info("Bootstrapper inserted contact " + insertedContact.getId() + " for user " + userId);
 
