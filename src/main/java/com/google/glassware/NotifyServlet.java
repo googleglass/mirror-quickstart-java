@@ -47,6 +47,9 @@ import javax.servlet.http.HttpServletResponse;
 public class NotifyServlet extends HttpServlet {
   private static final Logger LOG = Logger.getLogger(NotifyServlet.class.getSimpleName());
 
+  private static final String CUTE_NOTE = "cats are cute";
+  private static final String MEAN_NOTE = "cats are mean";
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -139,15 +142,15 @@ public class NotifyServlet extends HttpServlet {
         // an HTML response (deleting the text as well).
         String noteText = timelineItem.getText();
 
-        if ("cats are cute".equals(noteText)) {
+        if (CUTE_NOTE.equals(noteText)) {
           timelineItem.setHtml(makeHtmlForCard("<p>"
               + "Awww, you think cats are cute! <em class='green'>Purrrr... meow....</em></p>"));
-        } else if ("cats are mean".equals(noteText)) {
+        } else if (MEAN_NOTE.equals(noteText)) {
           timelineItem.setHtml(makeHtmlForCard("<p>"
               + "What? You think cats are mean? <em class='red'>Hissss... scratch...</em></p>"));
         } else {
           timelineItem.setHtml(makeHtmlForCard("<p>"
-              + "Cat doesn't understand the note you left: <em>" + noteText + "</em></p>"));
+              + "Oh, did you say " + noteText + "? <em class='yellow'>Mee-ow!</em></p>"));
         }
 
         timelineItem.setText(null);
