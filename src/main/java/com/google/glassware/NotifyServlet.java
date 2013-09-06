@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.logging.Logger;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +48,11 @@ import javax.servlet.http.HttpServletResponse;
 public class NotifyServlet extends HttpServlet {
   private static final Logger LOG = Logger.getLogger(NotifyServlet.class.getSimpleName());
 
-  private static final String CUTE_NOTE = "cats are cute";
-  private static final String MEAN_NOTE = "cats are mean";
+  private static final String[] CAT_UTTERANCES = {
+      "<em class='green'>Purr...</em>",
+      "<em class='red'>Hisss... scratch...</em>",
+      "<em class='yellow'>Meow...</em>"
+  };
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -141,19 +145,14 @@ public class NotifyServlet extends HttpServlet {
         // Grab the spoken text from the timeline card and update the card with
         // an HTML response (deleting the text as well).
         String noteText = timelineItem.getText();
-
-        if (CUTE_NOTE.equals(noteText)) {
-          timelineItem.setHtml(makeHtmlForCard("<p>"
-              + "Awww, you think cats are cute! <em class='green'>Purrrr... meow....</em></p>"));
-        } else if (MEAN_NOTE.equals(noteText)) {
-          timelineItem.setHtml(makeHtmlForCard("<p>"
-              + "What? You think cats are mean? <em class='red'>Hissss... scratch...</em></p>"));
-        } else {
-          timelineItem.setHtml(makeHtmlForCard("<p>"
-              + "Oh, did you say " + noteText + "? <em class='yellow'>Mee-ow!</em></p>"));
-        }
+        String utterance = CAT_UTTERANCES[new Random().nextInt(CAT_UTTERANCES.length)];
 
         timelineItem.setText(null);
+        timelineItem.setHtml(makeHtmlForCard("<p class='text-auto-size'>"
+            + "Oh, did you say " + noteText + "? " + utterance + "</p>"));
+        timelineItem.setMenuItems(Lists.newArrayList(
+            new MenuItem().setAction("DELETE")));
+
         mirrorClient.timeline().update(timelineItem.getId(), timelineItem).execute();
       } else {
         LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
@@ -169,7 +168,7 @@ public class NotifyServlet extends HttpServlet {
    * @return the wrapped HTML content
    */
   private static String makeHtmlForCard(String content) {
-    return "<article><section>" + content + "</section>"
+    return "<article class='auto-paginate'>" + content
         + "<footer><p>Java Quick Start</p></footer></article>";
   }
 }

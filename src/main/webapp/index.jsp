@@ -234,11 +234,10 @@ limitations under the License.
       <% } %>
 
       <h3>Voice Commands</h3>
-      <p>The "Java Quick Start" contact can also accept the <strong>take a
+      <p>The "Java Quick Start" contact also accepts the <strong>take a
         note</strong> command. Take a note with the "Java Quick Start" contact
-        and give your opinion on cats. The quick start recognizes the
-        statements <strong>cats are cute</strong> and <strong>cats are
-        mean</strong>, but you can try saying anything else as well.</p>
+        and the cat in the server will record your note and reply with one of
+        a few cat utterances.</p>
     </div>
 
     <div class="span4">
