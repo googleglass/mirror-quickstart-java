@@ -21,6 +21,7 @@ import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpHeaders;
+import com.google.api.services.mirror.model.Command;
 import com.google.api.services.mirror.model.Contact;
 import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.MenuValue;
@@ -68,7 +69,20 @@ public class MainServlet extends HttpServlet {
   }
 
   private static final Logger LOG = Logger.getLogger(MainServlet.class.getSimpleName());
+  public static final String CONTACT_ID = "com.google.glassware.contact.java-quick-start";
   public static final String CONTACT_NAME = "Java Quick Start";
+
+  private static final String PAGINATED_HTML =
+      "<article class='auto-paginate'>"
+      + "<h2 class='blue text-large'>Did you know...?</h2>"
+      + "<p>Cats are <em class='yellow'>solar-powered.</em> The time they spend napping in "
+      + "direct sunlight is necessary to regenerate their internal batteries. Cats that do not "
+      + "receive sufficient charge may exhibit the following symptoms: lethargy, "
+      + "irritability, and disdainful glares. Cats will reactivate on their own automatically "
+      + "after a complete charge cycle; it is recommended that they be left undisturbed during "
+      + "this process to maximize your enjoyment of your cat.</p><br/><p>"
+      + "For more cat maintenance tips, tap to view the website!</p>"
+      + "</article>";
 
   /**
    * Do stuff when buttons on index.jsp are clicked
@@ -122,6 +136,23 @@ public class MainServlet extends HttpServlet {
 
       message = "A timeline item has been inserted.";
 
+    } else if (req.getParameter("operation").equals("insertPaginatedItem")) {
+      LOG.fine("Inserting Timeline Item");
+      TimelineItem timelineItem = new TimelineItem();
+      timelineItem.setHtml(PAGINATED_HTML);
+
+      List<MenuItem> menuItemList = new ArrayList<MenuItem>();
+      menuItemList.add(new MenuItem().setAction("VIEW_WEBSITE").setPayload(
+          "https://www.google.com/search?q=cat+maintenance+tips"));
+      timelineItem.setMenuItems(menuItemList);
+
+      // Triggers an audible tone when the timeline item is received
+      timelineItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));
+
+      MirrorClient.insertTimelineItem(credential, timelineItem);
+
+      message = "A timeline item has been inserted.";
+
     } else if (req.getParameter("operation").equals("insertItemWithAction")) {
       LOG.fine("Inserting Timeline Item");
       TimelineItem timelineItem = new TimelineItem();
@@ -152,9 +183,10 @@ public class MainServlet extends HttpServlet {
         // Insert a contact
         LOG.fine("Inserting contact Item");
         Contact contact = new Contact();
-        contact.setId(req.getParameter("name"));
+        contact.setId(req.getParameter("id"));
         contact.setDisplayName(req.getParameter("name"));
         contact.setImageUrls(Lists.newArrayList(req.getParameter("iconUrl")));
+        contact.setAcceptCommands(Lists.newArrayList(new Command().setType("TAKE_A_NOTE")));
         MirrorClient.insertContact(credential, contact);
 
         message = "Inserted contact: " + req.getParameter("name");
