@@ -172,7 +172,17 @@ limitations under the License.
           Insert the above message
         </button>
       </form>
-
+      <hr>
+      <% String defaultHtml = "<article><section><p class=\"text-auto-size\">This <em class=\"yellow\">paragraph</em>auto-resizes according to the <strong class=\"blue\">HTML</strong> content length.</p></section></article>"; %>
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+        <input type="hidden" name="operation" value="insertItem">
+        <textarea class="span4" name="html"><%=defaultHtml%></textarea><br/>
+        <button class="btn btn-block" type="submit">
+          Insert the above html
+        </button>
+      </form>
+      <hr>
+      
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItem">
         <input type="hidden" name="message" value="Chipotle says 'hi'!">

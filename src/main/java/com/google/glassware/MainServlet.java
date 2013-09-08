@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+ 
 
 /**
  * Handles POST requests from index.jsp
@@ -106,6 +107,8 @@ public class MainServlet extends HttpServlet {
 
       if (req.getParameter("message") != null) {
         timelineItem.setText(req.getParameter("message"));
+      }else if (req.getParameter("html") != null) {
+          timelineItem.setText(req.getParameter("html"));
       }
 
       // Triggers an audible tone when the timeline item is received
