@@ -52,10 +52,8 @@ public class AuthUtil {
    * Creates and returns a new {@link AuthorizationCodeFlow} for this app.
    */
   public static AuthorizationCodeFlow newAuthorizationCodeFlow() throws IOException {
-    //FileInputStream authPropertiesStream =
-    //    new FileInputStream("./src/main/resources/oauth.properties");
-    URL resource = AuthUtil.class.getResource("/myoauth.properties");
-    File propertiesFile = new File("./src/main/resources/myoauth.properties");
+    URL resource = AuthUtil.class.getResource("/oauth.properties");
+    File propertiesFile = new File("./src/main/resources/oauth.properties");
     try {
       propertiesFile = new File(resource.toURI());
       //LOG.info("Able to find oauth properties from file.");
