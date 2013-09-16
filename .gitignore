@@ -11,7 +11,3 @@
 
 # Maven output
 target
-
-# Personal config
-myoauth.properties
-
