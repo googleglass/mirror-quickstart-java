@@ -3,11 +3,3 @@
 # Package Files #
 *.war
 *.ear
-
-# Local Eclipse #
-.settings
-.configuration
-.classpath
-
-# Maven output
-target
