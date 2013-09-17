@@ -21,11 +21,16 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
 import com.google.api.client.json.jackson2.JacksonFactory;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -41,13 +46,22 @@ public class AuthUtil {
   public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline "
       + "https://www.googleapis.com/auth/glass.location "
       + "https://www.googleapis.com/auth/userinfo.profile";
+  private static final Logger LOG = Logger.getLogger(AuthUtil.class.getSimpleName());
 
   /**
    * Creates and returns a new {@link AuthorizationCodeFlow} for this app.
    */
   public static AuthorizationCodeFlow newAuthorizationCodeFlow() throws IOException {
-    FileInputStream authPropertiesStream =
-        new FileInputStream("./src/main/resources/oauth.properties");
+    URL resource = AuthUtil.class.getResource("/oauth.properties");
+    File propertiesFile = new File("./src/main/resources/oauth.properties");
+    try {
+      propertiesFile = new File(resource.toURI());
+      //LOG.info("Able to find oauth properties from file.");
+    } catch (URISyntaxException e) {
+      LOG.info(e.toString());
+      LOG.info("Using default source path.");
+    }
+    FileInputStream authPropertiesStream = new FileInputStream(propertiesFile);
     Properties authProperties = new Properties();
     authProperties.load(authPropertiesStream);
 
