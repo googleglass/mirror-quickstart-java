@@ -29,7 +29,7 @@ limitations under the License.
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-mirror</artifactId>
-      <version>v1-rev20-1.16.0-rc</version>
+      <version>v1-rev26-1.17.0-rc</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
