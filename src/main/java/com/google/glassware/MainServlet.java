@@ -142,7 +142,7 @@ public class MainServlet extends HttpServlet {
       timelineItem.setHtml(PAGINATED_HTML);
 
       List<MenuItem> menuItemList = new ArrayList<MenuItem>();
-      menuItemList.add(new MenuItem().setAction("VIEW_WEBSITE").setPayload(
+      menuItemList.add(new MenuItem().setAction("OPEN_URI").setPayload(
           "https://www.google.com/search?q=cat+maintenance+tips"));
       timelineItem.setMenuItems(menuItemList);
 
