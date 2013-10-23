@@ -48,7 +48,7 @@ limitations under the License.
       if (subscription.getId().equals("timeline")) {
         timelineSubscriptionExists = true;
       }
-      if (subscription.getId().equals("location")) {
+      if (subscription.getId().equals("locations")) {
         locationSubscriptionExists = true;
       }
     }
