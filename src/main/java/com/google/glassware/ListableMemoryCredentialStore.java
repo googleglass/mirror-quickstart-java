@@ -30,6 +30,13 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
+
+/*
+ * This is no longer used.  The credential store is now using AppEngineDataStore and StoredCredential per latest App Engine API
+ */
+
+
+@Deprecated
 public class ListableMemoryCredentialStore implements CredentialStore {
 
   /**

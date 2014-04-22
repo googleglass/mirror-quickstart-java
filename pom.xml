@@ -26,17 +26,22 @@ limitations under the License.
 
   <dependencies>
     <!-- Java Google API Client Library -->
-    <dependency>
-      <groupId>com.google.apis</groupId>
-      <artifactId>google-api-services-mirror</artifactId>
-      <version>v1-rev26-1.17.0-rc</version>
-    </dependency>
+        <dependency>
+        	<groupId>com.google.apis</groupId>
+        	<artifactId>google-api-services-mirror</artifactId>
+        	<version>v1-rev46-1.18.0-rc</version>
+        </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client-jackson2</artifactId>
-      <version>1.17.0-rc</version>
+      <version>1.18.0-rc</version>
     </dependency>
-
+    <!--  App Engine Library -->
+        <dependency>
+        	<groupId>com.google.api-client</groupId>
+        	<artifactId>google-api-client-appengine</artifactId>
+        	<version>1.18.0-rc</version>
+        </dependency>
     <!-- Jetty plugin dependencies -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>

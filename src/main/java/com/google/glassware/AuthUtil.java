@@ -15,18 +15,12 @@
  */
 package com.google.glassware;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.http.javanet.NetHttpTransport;
-
-import com.google.api.client.json.jackson2.JacksonFactory;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -35,19 +29,45 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.auth.oauth2.StoredCredential;
+import com.google.api.client.extensions.appengine.datastore.AppEngineDataStoreFactory;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.AppIdentityCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.store.DataStore;
+import com.google.api.services.mirror.Mirror;
+import com.google.api.services.mirror.model.Account;
+import com.google.api.services.mirror.model.AuthToken;
+
 /**
  * A collection of utility functions that simplify common authentication and
  * user identity tasks
  *
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
+
 public class AuthUtil {
-  public static ListableMemoryCredentialStore store = new ListableMemoryCredentialStore();
   public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline "
       + "https://www.googleapis.com/auth/glass.location "
       + "https://www.googleapis.com/auth/userinfo.profile";
   private static final Logger LOG = Logger.getLogger(AuthUtil.class.getSimpleName());
 
+  	public static DataStore<StoredCredential> getDataStore()  {
+  		DataStore<StoredCredential> store = null;
+  		try {
+  			 AppEngineDataStoreFactory.getDefaultInstance().getDataStore(StoredCredential.DEFAULT_DATA_STORE_ID);
+  		} catch (IOException e) {
+  			//TODO: handle this exception
+  			e.printStackTrace();
+  			throw new RuntimeException(e);
+  		}
+  		return store;
+  	}
+  
   /**
    * Creates and returns a new {@link AuthorizationCodeFlow} for this app.
    */
@@ -70,7 +90,7 @@ public class AuthUtil {
 
     return new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(),
         clientId, clientSecret, Collections.singleton(GLASS_SCOPE)).setAccessType("offline")
-        .setCredentialStore(store).build();
+        .setDataStoreFactory(AppEngineDataStoreFactory.getDefaultInstance()).build();
   }
 
   /**
@@ -91,7 +111,8 @@ public class AuthUtil {
   public static void clearUserId(HttpServletRequest request) throws IOException {
     // Delete the credential in the credential store
     String userId = getUserId(request);
-    store.delete(userId, getCredential(userId));
+    getDataStore().delete(userId);
+    //getDataStore().delete(userId, getCredential(userId));
 
     // Remove their ID from the local session
     request.getSession().removeAttribute("userId");
@@ -109,7 +130,59 @@ public class AuthUtil {
     return AuthUtil.newAuthorizationCodeFlow().loadCredential(getUserId(req));
   }
 
-  public static List<String> getAllUserIds() {
-    return store.listAllUsers();
+  @SuppressWarnings("unchecked")
+public static List<String> getAllUserIds() {
+    try {
+		return (List<String>) getDataStore().keySet();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    return null;
   }
+
+  /**
+   * {see #installMirrorAccount} 
+   * 
+ * @param applicationName
+ * @return
+ */
+public static Mirror getServerToServerMirror(String applicationName) {
+	     List<String> scopes = new ArrayList<String>();
+	     scopes.add("https://www.googleapis.com/auth/glass.thirdpartyauth");
+		 AppIdentityCredential credential = new AppIdentityCredential(scopes);
+		 HttpTransport httpTransport = new NetHttpTransport();
+			JacksonFactory jsonFactory = new JacksonFactory();
+		Mirror service = new Mirror.Builder(httpTransport, jsonFactory, null)
+		.setApplicationName(applicationName)
+		.setHttpRequestInitializer(credential).build();
+		return service;
+  }
+  
+  
+  /**
+ * Uses {see #getServerToServerMirror} 
+ * This method creates a mirror account to support authentication of your GDK application. {@see https://developers.google.com/glass/develop/gdk/authentication}
+ * @param userToken -- the userToken provided by MyGlass
+ * @param authTokenType
+ * @param accountType
+ * @param authToken -- application specific auth token
+ * @param appUserId -- application specific user id
+ * @param applicationName -- the name of your application 
+ * @throws IOException
+ */
+public static void installMirrorAccount(String userToken, String authTokenType, String accountType, String authToken, String appUserId, String applicationName) throws IOException {
+		try {
+		    Account account = new Account();
+		    	List<AuthToken> authTokens = new ArrayList<AuthToken>();
+		    	authTokens.add(new AuthToken().setType(authTokenType).setAuthToken(authToken));
+		    account.setAuthTokens(authTokens);
+		    getServerToServerMirror(applicationName).accounts().insert(
+		        userToken, accountType, appUserId, account).execute();
+		  } catch (IOException e) {
+			 LOG.warning("Failed to save to mirror: " + e.getMessage());
+		    e.printStackTrace();
+		  }
+  }
+  
 }

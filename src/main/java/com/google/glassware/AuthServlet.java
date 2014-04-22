@@ -55,7 +55,7 @@ public class AuthServlet extends HttpServlet {
               .setRedirectUri(WebUtil.buildUrl(req, "/oauth2callback")).execute();
 
       // Extract the Google User ID from the ID token in the auth response
-      String userId = ((GoogleTokenResponse) tokenResponse).parseIdToken().getPayload().getUserId();
+      String userId = ((GoogleTokenResponse) tokenResponse).parseIdToken().getPayload().getSubject();
 
       LOG.info("Code exchange worked. User " + userId + " logged in.");
 
