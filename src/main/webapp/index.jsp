@@ -109,7 +109,7 @@ limitations under the License.
                 <%
                 if (timelineItem.getAttachments() != null) {
                   for (Attachment attachment : timelineItem.getAttachments()) {
-                    if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("")) { %>
+                    if (MirrorClient.getAttachmentContentType(credential, timelineItem.getId(), attachment.getId()).startsWith("image")) { %>
                 <img src="<%= appBaseUrl + "attachmentproxy?attachment=" +
                   attachment.getId() + "&timelineItem=" + timelineItem.getId() %>">
                 <%  } else { %>
