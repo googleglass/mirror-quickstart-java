@@ -28,8 +28,14 @@ public class WebUtil {
    * Builds a URL relative to this app's root.
    */
   public static String buildUrl(HttpServletRequest req, String relativePath) {
+
     GenericUrl url = new GenericUrl(req.getRequestURL().toString());
     url.setRawPath(relativePath);
+    // If you're using a request forwarder, like ngrok, you probably need to
+    // change this function
+    if (req.getServerName().contains("ngrok.com")) {
+      url.setScheme("https");
+    }
     return url.build();
   }
 
